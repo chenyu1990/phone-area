@@ -1,0 +1,27 @@
+# Binaries for programs and plugins
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+# Test binary, build with `go test -c`
+*.test
+
+# Output of the go coverage tool, specifically when used with LiteIDE
+*.out
+
+*.DS_Store
+/cmd/phone-area
+/cmd/phone-area.exe
+/release
+/data
+/tmp
+/vendor
+
+# IDE configs
+.idea
+.vscode
+
+go.mod
+go.sum
