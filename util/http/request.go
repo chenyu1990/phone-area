@@ -4,7 +4,6 @@ import (
 	"errors"
 	"io/ioutil"
 	"net/http"
-	"time"
 )
 
 func Get(url string) ([]byte, error) {
@@ -16,8 +15,8 @@ func Get(url string) ([]byte, error) {
 	}
 
 
-	connectTimer := time.NewTimer(5 * time.Second)
-	resp, err := doTimeoutRequest(client, connectTimer, req)
+	//connectTimer := time.NewTimer(5 * time.Second)
+	resp, err := client.Do(req)
 	if err != nil {
 		return nil, err
 	}
@@ -40,20 +39,20 @@ func Get(url string) ([]byte, error) {
 }
 
 // 超时处理
-func doTimeoutRequest(client *http.Client, timer *time.Timer, req *http.Request) (*http.Response, error) {
-	type result struct {
-		resp *http.Response
-		err  error
-	}
-	done := make(chan result, 1)
-	go func() {
-		resp, err := client.Do(req)
-		done <- result{resp, err}
-	}()
-	select {
-	case r := <-done:
-		return r.resp, r.err
-	case <-timer.C:
-		return nil, errors.New("request timeout")
-	}
-}
+//func doTimeoutRequest(client *http.Client, timer *time.Timer, req *http.Request) (*http.Response, error) {
+//	type result struct {
+//		resp *http.Response
+//		err  error
+//	}
+//	done := make(chan result, 1)
+//	go func() {
+//		resp, err := client.Do(req)
+//		done <- result{resp, err}
+//	}()
+//	select {
+//	case r := <-done:
+//		return r.resp, r.err
+//	case <-timer.C:
+//		return nil, errors.New("request timeout")
+//	}
+//}

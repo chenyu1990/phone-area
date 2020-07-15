@@ -2,12 +2,10 @@ package area
 
 import (
 	"bufio"
-	"encoding/json"
 	"fmt"
 	"io"
 	"os"
 	"phone-area/schema"
-	"phone-area/util/http"
 	"regexp"
 	"sync"
 )
@@ -52,7 +50,15 @@ func (a *Area) Run() error {
 	for _, info := range phonesInfo {
 		group.Add(1)
 		go func(pi *schema.PhoneInfo) {
-			_ = a.getInfo(pi)
+			res, err := getInfo(pi)
+			if err != nil {
+				return
+			}
+
+			pi.Province = res.Data.Province
+			pi.City = res.Data.City
+			pi.Area = pi.Province + pi.City
+			pi.ServiceProvider = res.Data.ServiceProvider
 			group.Done()
 		}(info)
 	}
@@ -81,26 +87,6 @@ func (a *Area) Run() error {
 			return err
 		}
 	}
-
-	return nil
-}
-
-func (a *Area) getInfo(info *schema.PhoneInfo) error {
-
-	body, err := http.Get(API + info.Number)
-	if err != nil {
-		return err
-	}
-	var res Response
-	err = json.Unmarshal(body, &res)
-	if err != nil {
-		return err
-	}
-
-	info.Province = res.Data.Province
-	info.City = res.Data.City
-	info.Area = info.Province + info.City
-	info.ServiceProvider = res.Data.ServiceProvider
 
 	return nil
 }
