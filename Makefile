@@ -11,4 +11,7 @@ build-win32:
 	@go build -ldflags "-w -s" -o ./cmd/phone-area.exe main.go
 
 start:
-	go run main.go txt -f phone.txt
+	go run main.go txt -f phone.txt -o output.txt
+
+start-excel:
+	go run main.go txt -f phone.xlsx -o output.xlsx

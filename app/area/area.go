@@ -9,6 +9,17 @@ import (
 
 const API = "https://cx.shouji.360.cn/phonearea.php?number="
 
+type Data struct {
+	Province        string `json:"province"`
+	City            string `json:"city"`
+	ServiceProvider string `json:"sp"`
+}
+
+type Response struct {
+	Code int
+	Data Data
+}
+
 func getInfo(info *schema.PhoneInfo, tryCounts ...int64) (*Response, error) {
 	body, err := http.Get(API + info.Number)
 	if err != nil {

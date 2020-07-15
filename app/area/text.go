@@ -10,32 +10,21 @@ import (
 	"sync"
 )
 
-type Area struct {
+type Text struct {
 	File        string
 	ProjectFile string
 	OutputFile  string
 }
 
-type Data struct {
-	Province        string `json:"province"`
-	City            string `json:"city"`
-	ServiceProvider string `json:"sp"`
-}
-
-type Response struct {
-	Code int
-	Data Data
-}
-
-func NewArea(file, outputFile, projectFile string) *Area {
-	return &Area{
+func NewText(file, outputFile, projectFile string) *Text {
+	return &Text{
 		File:        file,
 		ProjectFile: projectFile,
 		OutputFile:  outputFile,
 	}
 }
 
-func (a *Area) Run() error {
+func (a *Text) Run() error {
 	phonesInfo, err := a.getPhones()
 	if err != nil {
 		return err
@@ -91,7 +80,7 @@ func (a *Area) Run() error {
 	return nil
 }
 
-func (a *Area) getProjects() (map[string]string, error) {
+func (a *Text) getProjects() (map[string]string, error) {
 	projects := make(map[string]string)
 	if a.ProjectFile == "" {
 		return projects, nil
@@ -127,7 +116,7 @@ func (a *Area) getProjects() (map[string]string, error) {
 	return projects, nil
 }
 
-func (a *Area) getPhones() (schema.PhoneInfos, error) {
+func (a *Text) getPhones() (schema.PhoneInfos, error) {
 	fi, err := os.Open(a.File)
 	if err != nil {
 		return nil, err
